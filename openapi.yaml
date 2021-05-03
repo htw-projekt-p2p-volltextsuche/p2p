@@ -1,0 +1,33 @@
+openapi: 3.1.0
+info:
+  title: P2P component
+  version: 0.1
+paths:
+  /search:
+    get:
+      summary: Query the network
+      description: Given a query (optionally including filters) return the integrated results from all available peer's Volltextsuche
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: json array of results
+          content: # to be defined by volltextsuche
+        "400":
+          description: No query given
+  /insert_speech:
+    post:
+      summary: Insert a speech into the network
+      description: Given a speech pass it to the correct peer's Volltextsuche process for insertion
+      requestBody:
+        content:
+          application/json:
+            schema: # to be defined by crawler/volltextsuche
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: No body given
