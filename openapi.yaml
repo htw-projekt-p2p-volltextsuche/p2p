@@ -31,3 +31,18 @@ paths:
           description: OK
         "400":
           description: No body given
+  /search_local:
+    get:
+      summary: Only query this peer
+      description: Private API, function for a peer to request search results from another peer
+      parameters:
+      - name: query
+        in: query
+        schema:
+          type: string
+      responses:
+        "200":
+          description: json array of results
+          content: # to be defined by volltextsuche
+        "400":
+          description: No query given
