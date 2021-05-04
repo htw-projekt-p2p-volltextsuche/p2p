@@ -49,5 +49,10 @@ Can't be defined in detail yet, because I don't yet understand how it will work.
 ## P2P-Logik
 
 `data`
-- `Obj`: result of a search
-- `Speech`
+- `Obj`: result of a search (JSON? Defined by volltextsuche)
+- `Speech`:
+  - `int SpeechId`: unique ID, so the speech can be found in the DB
+
+- `MapReduce`: Responsible for accumulating and reducing the search results from the volltextsuche from all relevant peers
+  - Obj[] getSearchResults( String query ) : gets all search results from all relevant peers
+  - `Map<Int, String, String> mapReduceSearchResults(Obj[] searchResults)` : Map/Reduce the search results of the different peers. Removes duplicates and maps into format needed by the UI (needs definition, example used here: Map<Int (SpeechId), String (SpeakerName), String (TextSnippet)> as an example)
