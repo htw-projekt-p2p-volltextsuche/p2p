@@ -82,6 +82,7 @@ components:
           type: string
           minLength: 1
           description: docId as uuid
+          format: uuid
         title:
           type: string
           minLength: 1
@@ -96,6 +97,7 @@ components:
           type: string
           minLength: 1
           description: 'date at which the speech was given in ISO 8601-1:2019 format'
+          format: date
         text:
           type: string
           minLength: 1
@@ -109,13 +111,35 @@ components:
   securitySchemes: {}
   responses:
     SearchResult:
-      description: Example response
+      description: Representation of a result for a specific search query.
       content:
         application/json:
           schema:
+            type: object
             properties:
-              id:
-                type: string
+              query:
+                type: array
+                items: {}
+              findings:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    docId:
+                      type: string
+                      format: uuid
+                    relevance:
+                      type: number
+                    positions:
+                      type: array
+                      items:
+                        type: integer
+                    title:
+                      type: string
+                    speaker:
+                      type: string
+                    affiliation:
+                      type: string
   parameters:
     search:
       name: search
