@@ -1,48 +1,151 @@
 openapi: 3.1.0
 info:
-  title: P2P component
-  version: 0.1
+  title: P2P framework
+  version: 0.2
 paths:
-  /search:
+  /:key:
     get:
-      summary: Query the network
-      description: Given a query (optionally including filters) return the integrated results from all available peer's Volltextsuche
+      summary: Get an entry from hash table
+      description: data is an array
       parameters:
-      - name: query
-        in: query
-        schema:
-          type: string
-      responses:
-        "200":
-          description: json array of results
-          content: # to be defined by volltextsuche
-        "400":
-          description: No query given
-  /insert_speech:
-    post:
-      summary: Insert a speech into the network
-      description: Given a speech pass it to the correct peer's Volltextsuche process for insertion
-      requestBody:
-        content:
-          application/json:
-            schema: # to be defined by crawler/volltextsuche
+      - name: key
+        in: path
       responses:
         "200":
           description: OK
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+                data: "any[]"
+              example:
+                error: false
+                errorMsg: null
+                key: "Grundgesetz"
+                data: [ "postingList1", "postingList2" ]
         "400":
-          description: No body given
-  /search_local:
-    get:
-      summary: Only query this peer
-      description: Private API, function for a peer to request search results from another peer
+          description: User error
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+                data: "any[]"
+              example:
+                error: true
+                errorMsg: "No key given"
+                key: null
+                data: null
+    put:
+      summary: Insert an entry into the hash table (replace if exists)
+      description: data shall be an array, if it is not it will be wrapped in one
       parameters:
-      - name: query
-        in: query
+      - name: key
+        in: path
+      - name: data
+        in: body
         schema:
-          type: string
+          format:
+            data: "any[]"
       responses:
         "200":
-          description: json array of results
-          content: # to be defined by volltextsuche
+          description: OK
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+              example:
+                error: false
+                errorMsg: null
+                key: "Grundgesetz"
         "400":
-          description: No query given
+          description: User error
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+              example:
+                error: true
+                errorMsg: "No key given"
+                key: null
+  /append/:key:
+    post:
+      summary: Append to an entry in the hash table
+      description: data shall be an array (if not it will be encapsulated in one) and will be concatenated with the existing entry if there is one
+      parameters:
+      - name: key
+        in: path
+      - name: data
+        in: body
+        schema:
+          format:
+            data: "any[]"
+      responses:
+        "200":
+          description: OK
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+              example:
+                error: false
+                errorMsg: null
+                key: "Grundgesetz"
+        "400":
+          description: User error
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+                key: "string"
+              example:
+                error: true
+                errorMsg: "No key given"
+                key: null
+  /batch-get:
+    post:
+      summary: Get multiple entries of the hash table
+      description:
+        parameters:
+          - name: keys
+            in: body
+            schema:
+              format:
+                data: "string[]"
+        responses:
+          "200":
+            description: OK
+            content:
+              schema:
+                format:
+                  error: "boolean"
+                  errorMsg: "string"
+                  keys: "string[]"
+                  data: "any[][]"
+                example:
+                  error: false
+                  errorMsg: null
+                  keys: [ "Grundgesetz", "Merkel" ]
+                  data: [ [ "postingList1", "postingList2" ], [ "postingList3", "postingList4" ] ]
+          "400":
+            description: User error
+            content:
+              schema:
+                format:
+                  error: "boolean"
+                  errorMsg: "string"
+                  keys: "string[]"
+                example:
+                  error: true
+                  errorMsg: "No keys given"
+                  keys: null
