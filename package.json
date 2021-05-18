@@ -1,0 +1,29 @@
+{
+  "name": "p2p",
+  "version": "0.1.0",
+  "description": "",
+  "repository": "htw-projekt-p2p-volltextsuche/p2p",
+  "license": "GPLv3",
+  "author": {
+    "name": "Jonathan Neidel",
+    "email": "git@jneidel.com",
+    "url": "http://jneidel.com"
+  },
+  "main": "app.js",
+  "engines": {
+    "node": ">=14"
+  },
+  "scripts": {
+    "start": "nodemon app.js --trace-sync-io",
+    "start-prod": "node -r dotenv/config app.js dotenv_config_path=.env"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.7"
+  }
+}
