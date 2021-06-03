@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "nodemon app.js --trace-sync-io",
-    "start-prod": "node -r dotenv/config app.js dotenv_config_path=.env"
+    "start-prod": "node -r dotenv/config app.js dotenv_config_path=variables.env"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
