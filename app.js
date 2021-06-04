@@ -26,7 +26,7 @@ const env = parseEnv( process.env );
   // 404
   app.use( ( req, res, next ) => {
     const err = new Error( "Not Found" );
-    err.status = 403;
+    err.status = 404;
     next( err );
   } );
 
