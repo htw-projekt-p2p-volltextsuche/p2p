@@ -1,6 +1,11 @@
 const express = require( "express" );
 const bodyParser = require( "body-parser" );
 const logger = require( "./logs/logger" );
+const p2p = require( "./p2p" );
+const parseEnv = require( "./lib/parseEnv" );
+
+require( "dotenv" ).config( { path: "variables.env" } );
+const env = parseEnv( process.env );
 
 const app = express();
 
@@ -30,22 +35,8 @@ app.use( ( err, req, res, next ) => {
   res.json( data );
 } );
 
-require( "dotenv" ).config( { path: "variables.env" } );
-const { PORT, BOOTSTRAP_LIST } = process.env;
-const port = PORT ? PORT : 9000;
-const bootstrapList = (BOOTSTRAP_LIST ? BOOTSTRAP_LIST : "").split( "," ).map( x => x.trim() ).filter( x => !!x );
+p2p( env );
 
-if ( process.argv.includes( "--debug" ) ) {
-  console.log( `Read environmental variables:
-
-  PORT: ${port}
-  BOOTSTRAP_LIST: ${bootstrapList.map( x => "\n    " + x )}
-` );
-  process.exit(0);
-}
-
-p2p( bootstrapList );
-
-app.listen( PORT, () => {
-  console.log( `Server running on http://localhost:${PORT}` ); // eslint-disable-line no-console
+app.listen( env.HTTP_PORT, () => {
+  console.log( `Server running on http://localhost:${env.HTTP_PORT}` ); // eslint-disable-line no-console
 } );
