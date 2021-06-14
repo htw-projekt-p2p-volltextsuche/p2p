@@ -69,3 +69,7 @@ Pass the `--debug` flag to print the env variables that are being read in.
 ```sh
 node app.js --debug
 ```
+or
+```sh
+npm run debug
+```
