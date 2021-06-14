@@ -52,6 +52,6 @@ async function createNode( env ) {
     console.log( "Attempting to connect:", env.PEER_LIST );
 
   return node;
-};
+}
 
 module.exports = { createNode };

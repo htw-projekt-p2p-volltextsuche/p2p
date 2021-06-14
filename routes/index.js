@@ -10,7 +10,7 @@ router.route( "/:key" )
         if ( value ) {
           try {
             valArray = JSON.parse( value.toString() );
-            res.status( 200 ).json( { error: false, value: valArray } );
+            res.status( 200 ).json( { error: false, data: valArray } );
           } catch ( err ) {
             next( err );
           }

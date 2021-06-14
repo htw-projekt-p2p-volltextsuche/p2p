@@ -7,7 +7,7 @@ const parseEnv = require( "./lib/parseEnv" );
 require( "dotenv" ).config( { path: "variables.env" } );
 const env = parseEnv( process.env );
 
-(async () => { // async wrapper to be able to use await
+( async () => { // async wrapper to be able to use await
   const app = express();
   app.use( logger.dev );
   app.use( bodyParser.json() );
@@ -43,4 +43,4 @@ const env = parseEnv( process.env );
   app.listen( env.HTTP_PORT, () => {
     console.log( `Server running on http://localhost:${env.HTTP_PORT}` ); // eslint-disable-line no-console
   } );
-})()
+} )();
