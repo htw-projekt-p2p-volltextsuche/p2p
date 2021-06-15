@@ -24,7 +24,7 @@ async function createNode( env ) {
       // dht           : DHT,
     },
     datastore,
-    config   : {
+    config: {
       peerDiscovery: {
         autoDial       : true,
         [bootstrap.tag]: {
