@@ -6,12 +6,14 @@ const bootstrap = require( "libp2p-bootstrap" );
 const DHT = require( "libp2p-kad-dht" );
 const utils = require( "../node_modules/libp2p-kad-dht/src/utils" );
 
-const { createStorage } = require( "./storage" );
+const { createStorage, getPeerId } = require( "./fs" );
 
 async function createNode( env ) {
-  const fs = await createStorage( env.PEER_STORAGE );
+  const datastore = await createStorage( env.PEER_STORAGE );
+  const peerId = await getPeerId( env.PEER_STORAGE );
 
   const nodeOptions = {
+    peerId,
     addresses: {
       listen: [ `/ip4/${env.PEER_IP}/tcp/${env.PEER_PORT}` ],
     },
@@ -21,7 +23,7 @@ async function createNode( env ) {
       streamMuxer   : [ MPLEX ],
       // dht           : DHT,
     },
-    datastore: fs,
+    datastore,
     config   : {
       peerDiscovery: {
         autoDial       : true,
@@ -46,7 +48,7 @@ async function createNode( env ) {
       peerId   : libp2p.peerId,
       peerStore: libp2p.peerStore,
       registrar: libp2p.registrar,
-      datastore: fs,
+      datastore,
     } );
     customDHT.start();
     customDHT.on( "peer", libp2p._onDiscoveryPeer );
