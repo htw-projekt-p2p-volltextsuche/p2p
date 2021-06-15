@@ -1,0 +1,26 @@
+#! /bin/sh
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "help" ] || [ -z "$1" ]; then
+  cat <<EOF
+$ spawnnode NR [-p]
+Run a given node
+
+Parameters:
+  \$1: number 0-9
+
+Flags:
+  -p: print mode
+EOF
+  exit
+fi
+
+N="$1"
+export HTTP_PORT="809$N"
+export PEER_PORT="807$N"
+export PEER_STORAGE="/tmp/storage$N"
+
+if [ "$2" = "-p" ]; then
+  npm run addr
+else
+  npm run start-prod
+fi
