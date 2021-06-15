@@ -11,7 +11,7 @@ async function createStorage( path ) {
   return flatfs;
 }
 
-const PEER_ID_FILE_NAME="peerId.json"
+const PEER_ID_FILE_NAME = "peerId.json";
 
 /*
  * Read peerId from fs
@@ -20,7 +20,7 @@ const PEER_ID_FILE_NAME="peerId.json"
 async function getPeerId( storagePath ) {
   const PEER_ID_FILE_PATH = path.resolve( storagePath, PEER_ID_FILE_NAME );
 
-
+  await fs.mkdir( storagePath, { recursive: true } );
   return fs.readFile( PEER_ID_FILE_PATH, { encoding: "utf-8" } )
     .then( data => {
       const jsonData = JSON.parse( data );
@@ -30,7 +30,7 @@ async function getPeerId( storagePath ) {
     .catch( async err => {
       const peerId = await PeerId.create();
       const jsonData = peerId.toJSON(); // https://github.com/libp2p/js-peer-id#tojson
-      fs.writeFile( PEER_ID_FILE_PATH, JSON.stringify(jsonData), { encoding: "utf-8" } ); // finish write in the background
+      fs.writeFile( PEER_ID_FILE_PATH, JSON.stringify( jsonData ), { encoding: "utf-8" } ); // finish write in the background
       return peerId;
     } );
 }
