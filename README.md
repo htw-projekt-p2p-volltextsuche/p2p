@@ -17,6 +17,7 @@ npm run start-prod
 ## Configure
 
 Configured via environmental variables in `variables.env`.
+See: [`variables.env.example`](variables.env.example).
 
 ### `HTTP_PORT`
 
@@ -54,22 +55,34 @@ Example:
 PEER_LIST=/ip4/127.0.0.1/tcp/8071/ipfs/QmdW3RF4Yq4acYc4bgUmxeuJQLb2mQpQmMuDTGir5gQcYM, /ip4/127.0.0.1/tcp/8072/ipfs/QmPP5pdu6Dh93DL7LnQkKU2x8m4BoSrQswjQR5q26PMneg
 ```
 
-<!--Todo: document PEER_PUB/PEER_PRI-->
-
 ### `PEER_STORAGE`
 
 Storage location on disk for the data of the DHT.
 
 Default: `/tmp/datastore`
 
-### Debugging environmental variables
+## Scripts
 
-Pass the `--debug` flag to print the env variables that are being read in.
+**Multiaddress:**
+
+Print the multiaddress used for connection to the node:
 
 ```sh
-node app.js --debug
+npm run addr
 ```
-or
+
+**Debug:**
+
+Print the environmental variables that are being read in:
+
 ```sh
 npm run debug
+```
+
+**Node testing:**
+
+Run a node for testing:
+
+```sh
+./spawnnode 1
 ```
