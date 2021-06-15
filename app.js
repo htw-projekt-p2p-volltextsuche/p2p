@@ -1,7 +1,7 @@
 const express = require( "express" );
 const bodyParser = require( "body-parser" );
 const logger = require( "./logs/logger" );
-const { createNode } = require( "./p2p/node" );
+const P2P = require( "./p2p" );
 const parseEnv = require( "./lib/parseEnv" );
 
 require( "dotenv" ).config( { path: "variables.env" } );
@@ -13,9 +13,10 @@ const env = parseEnv( process.env );
   app.use( bodyParser.json() );
   app.use( bodyParser.urlencoded( { extended: true } ) );
 
-  const node = await createNode( env );
+  const p2p = new P2P();
+  await p2p.create( env );
   app.use( ( req, res, next ) => {
-    req.node = node;
+    req.p2p = p2p;
     next();
   } );
 

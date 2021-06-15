@@ -4,7 +4,7 @@ const router = express.Router();
 router.route( "/:key" )
   .get( async ( req, res, next ) => {
     const key = Buffer.from( req.params.key, "utf-8" );
-    req.node.contentRouting.get( key )
+    req.p2p.get( key )
       .then( value => {
         let valArray;
         if ( value ) {
@@ -25,18 +25,13 @@ router.route( "/:key" )
       } );
   } )
   .put( async ( req, res, next ) => {
-    const key = Buffer.from( req.params.key, "utf-8" );
+    const { key } = req.params;
+    const value = req.body.data;
 
-    if ( !req.body.data )
+    if ( !value )
       return next( new Error( "missing data" ) );
 
-    try {
-      var value = Buffer.from( JSON.stringify( req.body.data ), "utf-8" );
-    } catch ( err ) {
-      return next( err );
-    }
-
-    req.node.contentRouting.put( key, value )
+    req.p2p.put( key, value )
       .then( () => {
         res.json( { error: false } );
       } )
