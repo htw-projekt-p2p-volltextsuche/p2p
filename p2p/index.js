@@ -2,7 +2,9 @@ const { createNode } = require( "./node" );
 
 class P2P {
   async create( env ) {
-    this.node = await createNode( env );
+    const { node, dht } = await createNode( env );
+    this.node = node;
+    this.dht = dht;
   }
 
   isInitialized() {
@@ -13,7 +15,7 @@ class P2P {
   get( key ) {
     this.isInitialized();
 
-    return this.node.contentRouting.get( key );
+    return this.dht.get( key );
   }
 
   put( rawKey, rawValue ) {
@@ -21,7 +23,7 @@ class P2P {
 
     const key = Buffer.from( rawKey, "utf-8" );
     const value = Buffer.from( JSON.stringify( rawValue ), "utf-8" );
-    return this.node.contentRouting.put( key, value );
+    return this.dht.put( key, value );
   }
 }
 
