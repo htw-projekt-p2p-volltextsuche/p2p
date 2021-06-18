@@ -1,5 +1,22 @@
 # p2p-dht
 
+Part of a project at HTW to build a distributed full-text-search. [See the rest
+of the project.](https://github.com/htw-projekt-p2p-volltextsuche)
+
+This repo implements the DHT that hosts the entries of the inverted index for
+the [full-text-search
+component](https://github.com/htw-projekt-p2p-volltextsuche/fulltext-search).
+
+## Design
+
+- [API Specification](docs/openapi.yaml)
+- [Architechture
+  Diagramms](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/tree/main/architecture)
+- [p2p Framework Choice and Data Distribution
+  Design](docs/data-distribution-design.md)
+- [User
+  Stories](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/projects/1)
+
 ## Run
 
 Development:
