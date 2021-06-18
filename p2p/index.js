@@ -15,7 +15,7 @@ class P2P {
   get( key ) {
     this.isInitialized();
 
-    return this.dht.get( key );
+    return this.dht.getWrapper( key );
   }
 
   put( rawKey, rawValue ) {

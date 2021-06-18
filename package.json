@@ -34,6 +34,13 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.7"
+    "err-code": "^3.0.1",
+    "k-bucket": "^5.1.0",
+    "libp2p-crypto": "^0.19.4",
+    "libp2p-record": "^0.10.3",
+    "nodemon": "^2.0.7",
+    "p-timeout": "^3.2.0",
+    "peer-id": "^0.14.8",
+    "uint8arrays": "^2.1.5"
   }
 }
