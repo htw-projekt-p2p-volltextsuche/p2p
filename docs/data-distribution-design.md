@@ -1,6 +1,6 @@
 # Data Distribution Design
 
-> How the inverted index should be distributed with the dht
+> How the inverted index should be distributed with the DHT
 
 ## Original Plan
 
@@ -38,8 +38,7 @@ It was preferable to:
 ### libp2p's Constraints
 
 One constraint that comes along with using libp2p is that the
-[put](https://github.com/libp2p/js-libp2p-kad-dht/blob/2137e2a89f9d1a32f870b3ccc
-e40d5cbb3d1af16/src/content-fetching/index.js#L103)
+[put](https://github.com/libp2p/js-libp2p-kad-dht/blob/2137e2a89f9d1a32f870b3ccce40d5cbb3d1af16/src/content-fetching/index.js#L103)
 separates local and remote insertion. Looking at the implementation of put it
 always inserts locally and then remotely into the network.
 This is not to our specification as we did not want to make a distinction

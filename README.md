@@ -13,7 +13,7 @@ component](https://github.com/htw-projekt-p2p-volltextsuche/fulltext-search).
 - [Architechture
   Diagramms](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/tree/main/architecture)
 - [p2p Framework Choice and Data Distribution
-  Design](docs/data-distribution-design.md)
+  Design](docs/data-distribution-design.md#readme)
 - [User
   Stories](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/projects/1)
 
