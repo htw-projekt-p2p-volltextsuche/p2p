@@ -15,7 +15,8 @@ class P2P {
   get( key ) {
     this.isInitialized();
 
-    return this.dht.get( key );
+    const buffKey = Buffer.from( key, "utf-8" );
+    return this.dht.get( buffKey );
   }
 
   put( rawKey, rawValue ) {

@@ -3,22 +3,10 @@ const router = express.Router();
 
 router.route( "/:key" )
   .get( async ( req, res, next ) => {
-    const key = Buffer.from( req.params.key, "utf-8" );
-    req.p2p.get( key )
-      .then( value => {
-        let valArray;
-        if ( value ) {
-          try {
-            valArray = JSON.parse( value.toString() );
-            res.status( 200 ).json( { error: false, data: valArray } );
-          } catch ( err ) {
-            next( err );
-          }
-        } else {
-          const err = new Error( "no result for the given key" );
-          err.status = 404;
-          next( err );
-        }
+    req.p2p.get( req.params.key )
+      .then( buffValue => {
+        const value = JSON.parse( buffValue.toString() );
+        res.status( 200 ).json( { error: false, data: value } );
       } )
       .catch( err => {
         next( err );
@@ -26,10 +14,12 @@ router.route( "/:key" )
   } )
   .put( async ( req, res, next ) => {
     const { key } = req.params;
-    const value = req.body.data;
+    let value = req.body.data;
 
     if ( !value )
       return next( new Error( "missing data" ) );
+
+    value = [ value ];
 
     req.p2p.put( key, value )
       .then( () => {
@@ -41,7 +31,38 @@ router.route( "/:key" )
   } );
 
 router.post( "/append/:key", ( req, res, next ) => {
-  res.json( { error: false } );
+  const { key } = req.params;
+  const valueToAppend = req.body.data;
+
+  if ( !valueToAppend )
+    return next( new Error( "missing data" ) );
+
+  req.p2p.get( key )
+    .then( buffValue => {
+      const valueArray = JSON.parse( buffValue.toString() );
+      valueArray.push( valueToAppend );
+
+      req.p2p.put( key, valueArray )
+        .then( () => {
+          res.json( { error: false } );
+        } )
+        .catch( next );
+    } )
+    .catch( err => {
+      if ( err.message === "No records given" ) {
+        // does not exist, simple put
+        const putValue = [ valueToAppend ];
+        console.log( "PUT:", putValue );
+
+        req.p2p.put( key, putValue )
+          .then( () => {
+            res.json( { error: false } );
+          } )
+          .catch( next );
+      } else {
+        next( err );
+      }
+    } );
 } );
 
 router.post( "/batch-get", ( req, res, next ) => {
