@@ -69,8 +69,10 @@ router.post( "/append/:key", ( req, res, next ) => {
 router.post( "/batch-get", async ( req, res, next ) => {
   const { keys } = req.body;
 
-  if ( !keys || keys.length === 0 === 0 )
+  if ( !keys )
     return next( new Error( "missing keys" ) );
+  if ( !Array.isArray( keys ) )
+    return next( new Error( "keys is not an array" ) );
 
   const keyPromises = keys.map( key => {
     const promise = req.p2p.get( key )
