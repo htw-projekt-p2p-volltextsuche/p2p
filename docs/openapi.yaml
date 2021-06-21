@@ -120,11 +120,19 @@ paths:
                 format:
                   error: "boolean"
                   keys: "string[]"
-                  data: "any[][]"
+                  values: "object"
                 example:
                   error: false
                   keys: [ "Grundgesetz", "Merkel" ]
-                  data: [ [ "postingList1", "postingList2" ], [ "postingList3", "postingList4" ] ]
+                  values: {
+                    "Grungesetz": {
+                      "error": false,
+                      "value": [ "postingList1", "postingList2" ]
+                    },
+                    "Merkel": {
+                      "error": true,
+                      "errorMsg": "Not found"
+                    }
           "400":
             description: User error
             content:
@@ -134,4 +142,4 @@ paths:
                   errorMsg: "string"
                 example:
                   error: true
-                  errorMsg: "No keys given"
+                  errorMsg: "missing keys"

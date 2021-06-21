@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.route( "/:key" )
   .get( async ( req, res, next ) => {
-    const key = req.params.key;
+    const { key } = req.params;
     req.p2p.get( key )
       .then( buffValue => {
         const valueArray = JSON.parse( buffValue.toString() );
@@ -66,8 +66,40 @@ router.post( "/append/:key", ( req, res, next ) => {
     } );
 } );
 
-router.post( "/batch-get", ( req, res, next ) => {
-  res.json( { error: false } );
+router.post( "/batch-get", async ( req, res, next ) => {
+  const { keys } = req.body;
+
+  if ( !keys || keys.length === 0 === 0 )
+    return next( new Error( "missing keys" ) );
+
+  const keyPromises = keys.map( key => {
+    const promise = req.p2p.get( key )
+      .then( buff => JSON.parse( buff.toString() ) )
+      .catch( err => err );
+
+    // Object.setPrototypeOf( promise, { key } );
+    return promise;
+  } );
+  const awaitedPromises = await Promise.allSettled( keyPromises );
+
+  const keyValueObject = {};
+  for ( const [ i, key ] of keys.entries() ) {
+    const valuePromise = awaitedPromises[i];
+    keyValueObject[key] = {
+      error: !!valuePromise.value.code,
+    };
+
+    if ( valuePromise.value.code ) {
+      keyValueObject[key].errorMsg =
+        valuePromise.value.code === "ERR_NO_RECORDS_RECEIVED" ?
+          "Not found" :
+          valuePromise.value.code;
+    } else {
+      keyValueObject[key].value = valuePromise.value;
+    }
+  }
+
+  res.json( { error: false, keys, values: keyValueObject } );
 } );
 
 module.exports = router;
