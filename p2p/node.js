@@ -11,6 +11,7 @@ const { createStorage, getPeerId } = require( "./fs" );
 async function createNode( env ) {
   const datastore = await createStorage( env.PEER_STORAGE );
   const peerId = await getPeerId( env.PEER_STORAGE );
+  const kBucketSize = env.PEER_REDUNDANCY;
 
   const nodeOptions = {
     peerId,
@@ -21,7 +22,6 @@ async function createNode( env ) {
       transport     : [ TCP ],
       connEncryption: [ NOISE ],
       streamMuxer   : [ MPLEX ],
-      // dht           : DHT,
     },
     datastore,
     config: {
@@ -32,7 +32,6 @@ async function createNode( env ) {
           list   : env.PEER_LIST,
         },
       },
-      // dht: { enabled: true },
     },
   };
 
@@ -49,6 +48,7 @@ async function createNode( env ) {
       peerStore: libp2p.peerStore,
       registrar: libp2p.registrar,
       datastore,
+      kBucketSize,
     } );
     customDHT.start();
     customDHT.on( "peer", libp2p._onDiscoveryPeer );
@@ -59,14 +59,11 @@ async function createNode( env ) {
     // customized put function
     // src: https://github.com/libp2p/js-libp2p-kad-dht/blob/master/src/content-fetching/index.js
     dht._log( "PutValue %b", key );
-
-    // create record in the dht format
     const record = await utils.createPutRecord( key, value );
 
     // put record to the closest peers
     // let counterAll = 0;
     // let counterSuccess = 0;
-
     await utils.mapParallel( dht.getClosestPeers( key, { shallow: true } ), async ( peer ) => {
       try {
         // counterAll += 1;

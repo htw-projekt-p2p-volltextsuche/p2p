@@ -80,6 +80,12 @@ Storage location on disk for the data of the DHT.
 
 Default: `/tmp/datastore`
 
+### `PEER_REDUNDANCY`
+
+Specifies on how many different remote nodes a value should be stored.
+
+Default: 2
+
 ## Scripts
 
 **Multiaddress:**
