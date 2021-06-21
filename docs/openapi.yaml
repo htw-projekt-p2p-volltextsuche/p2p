@@ -17,14 +17,12 @@ paths:
             schema:
               format:
                 error: "boolean"
-                errorMsg: "string"
                 key: "string"
-                data: "any[]"
+                value: "any[]"
               example:
                 error: false
-                errorMsg: null
                 key: "Grundgesetz"
-                data: [ "postingList1", "postingList2" ]
+                value: [ "postingList1", "postingList2" ]
         "400":
           description: User error
           content:
@@ -32,13 +30,9 @@ paths:
               format:
                 error: "boolean"
                 errorMsg: "string"
-                key: "string"
-                data: "any[]"
               example:
                 error: true
                 errorMsg: "No key given"
-                key: null
-                data: null
     put:
       summary: Insert an entry into the hash table (replace if exists)
       description: data shall be an array, if it is not it will be wrapped in one
@@ -49,7 +43,7 @@ paths:
         in: body
         schema:
           format:
-            data: "any[]"
+            data: "any"
       responses:
         "200":
           description: OK
@@ -57,12 +51,12 @@ paths:
             schema:
               format:
                 error: "boolean"
-                errorMsg: "string"
                 key: "string"
+                value: "any[]"
               example:
                 error: false
-                errorMsg: null
                 key: "Grundgesetz"
+                value: "[ 'inserted', 'data' ]"
         "400":
           description: User error
           content:
@@ -70,11 +64,9 @@ paths:
               format:
                 error: "boolean"
                 errorMsg: "string"
-                key: "string"
               example:
                 error: true
-                errorMsg: "No key given"
-                key: null
+                errorMsg: "missing data"
   /append/:key:
     post:
       summary: Append to an entry in the hash table
@@ -86,7 +78,7 @@ paths:
         in: body
         schema:
           format:
-            data: "any[]"
+            data: "any"
       responses:
         "200":
           description: OK
@@ -94,12 +86,12 @@ paths:
             schema:
               format:
                 error: "boolean"
-                errorMsg: "string"
                 key: "string"
+                value: "any[]"
               example:
                 error: false
-                errorMsg: null
                 key: "Grundgesetz"
+                value: "[ 'inserted', 'data' ]"
         "400":
           description: User error
           content:
@@ -107,11 +99,9 @@ paths:
               format:
                 error: "boolean"
                 errorMsg: "string"
-                key: "string"
               example:
                 error: true
-                errorMsg: "No key given"
-                key: null
+                errorMsg: "missing data"
   /batch-get:
     post:
       summary: Get multiple entries of the hash table
@@ -129,12 +119,10 @@ paths:
               schema:
                 format:
                   error: "boolean"
-                  errorMsg: "string"
                   keys: "string[]"
                   data: "any[][]"
                 example:
                   error: false
-                  errorMsg: null
                   keys: [ "Grundgesetz", "Merkel" ]
                   data: [ [ "postingList1", "postingList2" ], [ "postingList3", "postingList4" ] ]
           "400":
@@ -144,8 +132,6 @@ paths:
                 format:
                   error: "boolean"
                   errorMsg: "string"
-                  keys: "string[]"
                 example:
                   error: true
                   errorMsg: "No keys given"
-                  keys: null

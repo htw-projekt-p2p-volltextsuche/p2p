@@ -3,10 +3,11 @@ const router = express.Router();
 
 router.route( "/:key" )
   .get( async ( req, res, next ) => {
-    req.p2p.get( req.params.key )
+    const key = req.params.key;
+    req.p2p.get( key )
       .then( buffValue => {
-        const value = JSON.parse( buffValue.toString() );
-        res.status( 200 ).json( { error: false, data: value } );
+        const valueArray = JSON.parse( buffValue.toString() );
+        res.json( { error: false, key, value: valueArray } );
       } )
       .catch( err => {
         next( err );
@@ -23,7 +24,7 @@ router.route( "/:key" )
 
     req.p2p.put( key, value )
       .then( () => {
-        res.json( { error: false } );
+        res.json( { error: false, key, value } );
       } )
       .catch( err => {
         next( err );
@@ -44,7 +45,7 @@ router.post( "/append/:key", ( req, res, next ) => {
 
       req.p2p.put( key, valueArray )
         .then( () => {
-          res.json( { error: false } );
+          res.json( { error: false, key, value: valueArray } );
         } )
         .catch( next );
     } )
@@ -56,7 +57,7 @@ router.post( "/append/:key", ( req, res, next ) => {
 
         req.p2p.put( key, putValue )
           .then( () => {
-            res.json( { error: false } );
+            res.json( { error: false, key, value: putValue } );
           } )
           .catch( next );
       } else {
