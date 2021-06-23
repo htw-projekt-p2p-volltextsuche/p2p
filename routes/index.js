@@ -24,7 +24,7 @@ router.route( "/:key" )
 
     req.p2p.put( key, value )
       .then( () => {
-        res.json( { error: false, key, value } );
+        res.json( { error: false, key } );
       } )
       .catch( err => {
         next( err );
@@ -45,7 +45,7 @@ router.post( "/append/:key", ( req, res, next ) => {
 
       req.p2p.put( key, valueArray )
         .then( () => {
-          res.json( { error: false, key, value: valueArray } );
+          res.json( { error: false, key } );
         } )
         .catch( next );
     } )

@@ -52,11 +52,9 @@ paths:
               format:
                 error: "boolean"
                 key: "string"
-                value: "any[]"
               example:
                 error: false
                 key: "Grundgesetz"
-                value: "[ 'inserted', 'data' ]"
         "400":
           description: User error
           content:
@@ -87,11 +85,9 @@ paths:
               format:
                 error: "boolean"
                 key: "string"
-                value: "any[]"
               example:
                 error: false
                 key: "Grundgesetz"
-                value: "[ 'inserted', 'data' ]"
         "400":
           description: User error
           content:

@@ -21,6 +21,12 @@ component](https://github.com/htw-projekt-p2p-volltextsuche/fulltext-search).
 
 ## Run
 
+Install:
+
+```sh
+npm install
+```
+
 Development:
 
 ```sh

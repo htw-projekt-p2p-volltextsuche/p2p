@@ -26,10 +26,7 @@ curl -Ss -X PUT "http://localhost:8093/linux" -d '{"data":"arch"}' -H "Content-T
 ```
 {
   "error": false,
-  "key": "linux",
-  "value": [
-    "arch"
-  ]
+  "key": "linux"
 }
 ```
 
@@ -58,11 +55,7 @@ curl -Ss -X POST "http://localhost:8093/append/linux" -d '{"data":"debian"}' -H 
 ```
 {
   "error": false,
-  "key": "linux",
-  "value": [
-    "arch",
-    "debian"
-  ]
+  "key": "linux"
 }
 ```
 
