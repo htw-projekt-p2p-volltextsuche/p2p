@@ -56,9 +56,13 @@ router.post( "/append/:key", ( req, res, next ) => {
 
         req.p2p.put( key, putValue )
           .then( () => {
-            res.json( { error: false, key, value: putValue } );
+            res.json( { error: false, key } );
           } )
-          .catch( next );
+          .catch( next )
+          .then( () => {
+            // increment the keyset size key
+            req.p2p.incrementKeysetSize();
+          } );
       } else {
         next( err );
       }

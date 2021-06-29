@@ -7,6 +7,7 @@ const DHT = require( "libp2p-kad-dht" );
 const utils = require( "../node_modules/libp2p-kad-dht/src/utils" );
 
 const { createStorage, getPeerId } = require( "./fs" );
+const mountIncrementKeysetSize = require( "./incrementKeysetSize" );
 
 async function createNode( env ) {
   const datastore = await createStorage( env.PEER_STORAGE );
@@ -41,7 +42,7 @@ async function createNode( env ) {
   const node = await Libp2p.create( nodeOptions );
   const dht = ( function addDHT( libp2p ) {
     // src: https://github.com/libp2p/js-libp2p-kad-dht#custom-secondary-dht-in-libp2p
-    const customDHT = new DHT( {
+    let customDHT = new DHT( {
       libp2p,
       dialer   : libp2p.dialer,
       peerId   : libp2p.peerId,
@@ -52,6 +53,8 @@ async function createNode( env ) {
     } );
     customDHT.start();
     customDHT.on( "peer", libp2p._onDiscoveryPeer );
+
+    customDHT = mountIncrementKeysetSize( customDHT );
     return customDHT;
   } )( node );
 
@@ -62,13 +65,9 @@ async function createNode( env ) {
     const record = await utils.createPutRecord( key, value );
 
     // put record to the closest peers
-    // let counterAll = 0;
-    // let counterSuccess = 0;
     await utils.mapParallel( dht.getClosestPeers( key, { shallow: true } ), async ( peer ) => {
       try {
-        // counterAll += 1;
         await dht._putValueToPeer( key, record, peer );
-        // counterSuccess += 1;
       } catch ( err ) {
         dht._log.error( "Failed to put to peer (%b): %s", peer.id, err );
       }
