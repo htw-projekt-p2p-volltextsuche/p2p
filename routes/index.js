@@ -50,10 +50,9 @@ router.post( "/append/:key", ( req, res, next ) => {
         .catch( next );
     } )
     .catch( err => {
-      if ( err.message === "No records given" ) {
+      if ( err.message === "No records given" || err.message === "Not found" ) {
         // does not exist, simple put
         const putValue = [ valueToAppend ];
-        console.log( "PUT:", putValue );
 
         req.p2p.put( key, putValue )
           .then( () => {
