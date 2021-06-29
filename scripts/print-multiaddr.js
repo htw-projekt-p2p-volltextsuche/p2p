@@ -1,5 +1,5 @@
-const parseEnv = require( "./lib/parseEnv" );
-const { getPeerId } = require( "./p2p/fs" );
+const parseEnv = require( "../lib/parseEnv" );
+const { getPeerId } = require( "../p2p/fs" );
 
 ( async () =>  {
   require( "dotenv" ).config( { path: "variables.env" } );

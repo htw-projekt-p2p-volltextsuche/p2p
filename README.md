@@ -115,5 +115,13 @@ npm run debug
 Run a node for testing:
 
 ```sh
-./spawnnode 1
+npm run spawn 1
+```
+
+**Generate peerId locally:**
+
+Create the `peerId.json` locally.
+
+```sh
+npm run local-peerid
 ```
