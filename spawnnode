@@ -18,6 +18,8 @@ N="$1"
 export HTTP_PORT="809$N"
 export PEER_PORT="807$N"
 export PEER_STORAGE="/tmp/storage$N"
+export DEBUG=libp2p:dht:Q*,libp2p:dht:rpc:get-value:*
+# uses debug package for logging: https://www.npmjs.com/package/debug
 
 if [ "$2" = "-p" ]; then
   npm run addr
