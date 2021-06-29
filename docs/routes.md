@@ -46,19 +46,6 @@ curl -Ss "http://localhost:8091/linux"
 }
 ```
 
-## POST `/append/:key`
-
-```sh
-curl -Ss -X POST "http://localhost:8093/append/linux" -d '{"data":"debian"}' -H "Content-Type: application/json"
-```
-
-```
-{
-  "error": false,
-  "key": "linux"
-}
-```
-
 ## POST `/batch-get`
 
 ```sh

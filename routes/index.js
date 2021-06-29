@@ -15,58 +15,40 @@ router.route( "/:key" )
   } )
   .put( async ( req, res, next ) => {
     const { key } = req.params;
-    let value = req.body.data;
+    const valueToAppend = req.body.data;
 
-    if ( !value )
+    if ( !valueToAppend )
       return next( new Error( "missing data" ) );
 
-    value = [ value ];
+    req.p2p.get( key )
+      .then( buffValue => {
+        const valueArray = JSON.parse( buffValue.toString() );
+        valueArray.push( valueToAppend );
 
-    req.p2p.put( key, value )
-      .then( () => {
-        res.json( { error: false, key } );
-      } )
-      .catch( err => {
-        next( err );
-      } );
-  } );
-
-router.post( "/append/:key", ( req, res, next ) => {
-  const { key } = req.params;
-  const valueToAppend = req.body.data;
-
-  if ( !valueToAppend )
-    return next( new Error( "missing data" ) );
-
-  req.p2p.get( key )
-    .then( buffValue => {
-      const valueArray = JSON.parse( buffValue.toString() );
-      valueArray.push( valueToAppend );
-
-      req.p2p.put( key, valueArray )
-        .then( () => {
-          res.json( { error: false, key } );
-        } )
-        .catch( next );
-    } )
-    .catch( err => {
-      if ( err.message === "No records given" || err.message === "Not found" ) {
-        // does not exist, simple put
-        const putValue = [ valueToAppend ];
-
-        req.p2p.put( key, putValue )
+        req.p2p.put( key, valueArray )
           .then( () => {
             res.json( { error: false, key } );
           } )
-          .catch( next )
-          .then( () => {
-            // increment the keyset size key
-            req.p2p.incrementKeysetSize();
-          } );
-      } else {
-        next( err );
-      }
-    } );
+          .catch( next );
+      } )
+      .catch( err => {
+        if ( err.message === "No records given" || err.message === "Not found" ) {
+          // does not exist, simple put
+          const putValue = [ valueToAppend ];
+
+          req.p2p.put( key, putValue )
+            .then( () => {
+              res.json( { error: false, key } );
+            } )
+            .catch( next )
+            .then( () => {
+              // increment the keyset size key
+              req.p2p.incrementKeysetSize();
+            } );
+        } else {
+          next( err );
+        }
+      } );
 } );
 
 router.post( "/batch-get", async ( req, res, next ) => {

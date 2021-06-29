@@ -34,39 +34,6 @@ paths:
                 error: true
                 errorMsg: "No key given"
     put:
-      summary: Insert an entry into the hash table (replace if exists)
-      description: data shall be an array, if it is not it will be wrapped in one
-      parameters:
-      - name: key
-        in: path
-      - name: data
-        in: body
-        schema:
-          format:
-            data: "any"
-      responses:
-        "200":
-          description: OK
-          content:
-            schema:
-              format:
-                error: "boolean"
-                key: "string"
-              example:
-                error: false
-                key: "Grundgesetz"
-        "400":
-          description: User error
-          content:
-            schema:
-              format:
-                error: "boolean"
-                errorMsg: "string"
-              example:
-                error: true
-                errorMsg: "missing data"
-  /append/:key:
-    post:
       summary: Append to an entry in the hash table
       description: data shall be an array (if not it will be encapsulated in one) and will be concatenated with the existing entry if there is one
       parameters:
