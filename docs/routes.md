@@ -1,8 +1,9 @@
 # HTTP routes
 
 - [Specs](openapi.yaml)
+- `_keyset_size` - special key that tracks the number of keysets in the dht
 
-Practical examples:
+Practical example:
 
 ## Setup
 
