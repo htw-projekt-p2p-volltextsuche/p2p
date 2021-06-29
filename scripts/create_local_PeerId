@@ -1,0 +1,14 @@
+#! /bin/sh
+
+if [ "$1" = "--help" ] || [ "$1" = "-h" ] || [ "$1" = "help" ] || [ -n "$1" ]; then
+  cat <<EOF
+$ create_local_PeerId
+Create the peerId.json locally
+EOF
+  exit
+fi
+
+command -v node >/dev/null || { echo "node is not installed" 1>&2; exit 127; }
+
+export PEER_STORAGE=.
+npm run addr
