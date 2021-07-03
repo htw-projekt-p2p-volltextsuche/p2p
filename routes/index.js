@@ -40,16 +40,12 @@ router.route( "/:key" )
             .then( () => {
               res.json( { error: false, key } );
             } )
-            .catch( next )
-            .then( () => {
-              // increment the keyset size key
-              req.p2p.incrementKeysetSize();
-            } );
+            .catch( next );
         } else {
           next( err );
         }
       } );
-} );
+  } );
 
 router.post( "/batch-get", async ( req, res, next ) => {
   const { keys } = req.body;

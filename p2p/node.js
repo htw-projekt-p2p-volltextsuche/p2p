@@ -7,7 +7,6 @@ const DHT = require( "libp2p-kad-dht" );
 const utils = require( "../node_modules/libp2p-kad-dht/src/utils" );
 
 const { createStorage, getPeerId } = require( "./fs" );
-const mountIncrementKeysetSize = require( "./incrementKeysetSize" );
 
 async function createNode( env ) {
   const datastore = await createStorage( env.PEER_STORAGE );
@@ -42,7 +41,7 @@ async function createNode( env ) {
   const node = await Libp2p.create( nodeOptions );
   const dht = ( function addDHT( libp2p ) {
     // src: https://github.com/libp2p/js-libp2p-kad-dht#custom-secondary-dht-in-libp2p
-    let customDHT = new DHT( {
+    const customDHT = new DHT( {
       libp2p,
       dialer   : libp2p.dialer,
       peerId   : libp2p.peerId,
@@ -53,8 +52,6 @@ async function createNode( env ) {
     } );
     customDHT.start();
     customDHT.on( "peer", libp2p._onDiscoveryPeer );
-
-    customDHT = mountIncrementKeysetSize( customDHT );
     return customDHT;
   } )( node );
 
