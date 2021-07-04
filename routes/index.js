@@ -2,55 +2,89 @@ const express = require( "express" );
 require( "express-async-errors" );
 const router = express.Router();
 
-router.route( "/:key" )
-  .get( async ( req, res, next ) => {
-    const { key } = req.params;
-    req.p2p.get( key )
-      .then( buffValue => {
-        const valueArray = JSON.parse( buffValue.toString() );
-        res.json( { error: false, key, value: valueArray } );
-      } )
-      .catch( err => {
-        next( err );
-      } );
-  } )
-  .put( async ( req, res, next ) => {
-    const { key } = req.params;
-    const valueToAppend = req.body.data;
+router.get( "/:key", async ( req, res, next ) => {
+  const { key } = req.params;
+  req.p2p.get( key )
+    .then( buffValue => {
+      const valueArray = JSON.parse( buffValue.toString() );
+      res.json( { error: false, key, value: valueArray } );
+    } )
+    .catch( err => {
+      next( err );
+    } );
+} );
 
-    if ( !valueToAppend )
-      return next( new Error( "missing data" ) );
+router.put( "/append/:key", async ( req, res, next ) => {
+  const { key } = req.params;
+  const valueToAppend = req.body.data;
 
-    req.p2p.get( key )
-      .then( buffValue => {
-        const valueArray = JSON.parse( buffValue.toString() );
-        valueArray.push( valueToAppend );
+  if ( !valueToAppend )
+    return next( new Error( "missing data" ) );
 
-        req.p2p.put( key, valueArray )
+  req.p2p.get( key )
+    .then( buffValue => {
+      const valueArray = JSON.parse( buffValue.toString() );
+      valueArray.push( valueToAppend );
+
+      req.p2p.put( key, valueArray )
+        .then( () => {
+          res.json( { error: false, key } );
+        } )
+        .catch( next );
+    } )
+    .catch( err => {
+      if ( err.message === "No records given" || err.message === "Not found" ) {
+        // does not exist, simple put
+        req.p2p.put( key, [ valueToAppend ] )
           .then( () => {
             res.json( { error: false, key } );
           } )
-          .catch( next );
-      } )
-      .catch( err => {
-        if ( err.message === "No records given" || err.message === "Not found" ) {
-          // does not exist, simple put
-          const putValue = [ valueToAppend ];
+          .catch( next )
+          .then( () => {
+            req.p2p.incrementKeysetSize();
+          } );
+      } else {
+        next( err );
+      }
+    } );
+} );
 
-          req.p2p.put( key, putValue )
-            .then( () => {
-              res.json( { error: false, key } );
-            } )
-            .catch( next )
-            .then( () => {
-              // increment the keyset size key
-              req.p2p.incrementKeysetSize();
-            } );
-        } else {
-          next( err );
-        }
-      } );
-  } );
+router.put( "/merge/:key", async ( req, res, next ) => {
+  const { key } = req.params;
+  const valueToMerge = req.body.data;
+
+  if ( !valueToMerge )
+    return next( new Error( "missing data" ) );
+  if ( !Array.isArray( valueToMerge ) )
+    return next( new Error( "data is not an array" ) );
+
+  req.p2p.get( key )
+    .then( buffValue => {
+      const valueArray = JSON.parse( buffValue.toString() );
+      const mergedArray = [ ...valueArray, ...valueToMerge ];
+
+      req.p2p.put( key, mergedArray )
+        .then( () => {
+          res.json( { error: false, key } );
+        } )
+        .catch( next );
+    } )
+    .catch( err => {
+      if ( err.message === "No records given" || err.message === "Not found" ) {
+        // does not exist, simple put
+        req.p2p.put( key, valueToMerge )
+          .then( () => {
+            res.json( { error: false, key } );
+          } )
+          .catch( next )
+          .then( () => {
+            req.p2p.incrementKeysetSize();
+          } );
+      } else {
+        next( err );
+      }
+    } );
+} );
 
 router.post( "/batch-get", async ( req, res, next ) => {
   const { keys } = req.body;

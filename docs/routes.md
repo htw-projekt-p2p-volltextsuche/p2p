@@ -18,10 +18,24 @@ Practical example:
 #=> Server running on http://localhost:8093
 ```
 
-## PUT `/:key`
+## PUT `/append/:key`
 
 ```sh
-curl -Ss -X PUT "http://localhost:8093/linux" -d '{"data":"arch"}' -H "Content-Type: application/json"
+curl -Ss -X PUT "http://localhost:8093/append/linux" -d '{"data":"arch"}' -H "Content-Type: application/json"
+curl -Ss -X PUT "http://localhost:8093/append/linux" -d '{"data":"debian"}' -H "Content-Type: application/json"
+```
+
+```
+{
+  "error": false,
+  "key": "linux"
+}
+```
+
+## PUT `/merge/:key`
+
+```sh
+curl -Ss -X PUT "http://localhost:8093/merge/linux" -d '{"data":["ubuntu","manjaro"]}' -H "Content-Type: application/json"
 ```
 
 ```
@@ -42,7 +56,10 @@ curl -Ss "http://localhost:8091/linux"
   "error": false,
   "key": "linux",
   "value": [
-    "arch"
+    "arch",
+    "debian",
+    "ubuntu",
+    "manjaro"
   ]
 }
 ```
@@ -65,7 +82,9 @@ curl -Ss -X POST "http://localhost:8092/batch-get" -d '{"keys":["linux","windows
       "error": false,
       "value": [
         "arch",
-        "debian"
+        "debian",
+        "ubuntu",
+        "manjaro"
       ]
     },
     "windows": {

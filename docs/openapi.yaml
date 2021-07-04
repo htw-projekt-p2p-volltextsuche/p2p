@@ -33,9 +33,10 @@ paths:
               example:
                 error: true
                 errorMsg: "No key given"
+  /append/:key:
     put:
       summary: Append to an entry in the hash table
-      description: data shall be an array (if not it will be encapsulated in one) and will be concatenated with the existing entry if there is one
+      description: Entities are an array, to which you can add a single value through this route
       parameters:
       - name: key
         in: path
@@ -44,6 +45,43 @@ paths:
         schema:
           format:
             data: "any"
+          example:
+            data: { id: 123 }
+      responses:
+        "200":
+          description: OK
+          content:
+            schema:
+              format:
+                error: "boolean"
+                key: "string"
+              example:
+                error: false
+                key: "Grundgesetz"
+        "400":
+          description: User error
+          content:
+            schema:
+              format:
+                error: "boolean"
+                errorMsg: "string"
+              example:
+                error: true
+                errorMsg: "missing data"
+  /merge/:key:
+    put:
+      summary: Merge with the array in the hash table
+      description: Entities are an array, to which you can add a mutiple values through this route by wrapping them in an array
+      parameters:
+      - name: key
+        in: path
+      - name: data
+        in: body
+        schema:
+          format:
+            data: "any[]"
+          example:
+            data: [ { id: 123 }, { id: 124 } ]
       responses:
         "200":
           description: OK
