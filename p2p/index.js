@@ -26,6 +26,10 @@ class P2P {
     const value = Buffer.from( JSON.stringify( rawValue ), "utf-8" );
     return this.dht.put( key, value );
   }
+
+  incrementKeysetSize() {
+    return this.dht.incrementKeysetSize();
+  }
 }
 
 module.exports = P2P;
