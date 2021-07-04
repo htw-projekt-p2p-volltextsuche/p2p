@@ -1,4 +1,5 @@
 const express = require( "express" );
+require( "express-async-errors" );
 const router = express.Router();
 
 router.route( "/:key" )
@@ -49,7 +50,7 @@ router.route( "/:key" )
           next( err );
         }
       } );
-} );
+  } );
 
 router.post( "/batch-get", async ( req, res, next ) => {
   const { keys } = req.body;
