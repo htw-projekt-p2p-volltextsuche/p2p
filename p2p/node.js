@@ -14,6 +14,8 @@ async function createNode( env ) {
   const peerId = await getPeerId( env.PEER_STORAGE );
   const kBucketSize = env.PEER_REDUNDANCY;
 
+  console.log( Number.isInteger( kBucketSize ) );
+
   const nodeOptions = {
     peerId,
     addresses: {

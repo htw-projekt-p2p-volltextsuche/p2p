@@ -22,8 +22,6 @@ const env = parseEnv( process.env );
 
   app.use( "/", require( "./routes" ) );
 
-  process.on( "unhandledRejection", ( err ) => { throw err; } );
-
   // 404
   app.use( ( req, res, next ) => {
     const err = new Error( "Not Found" );
@@ -33,6 +31,11 @@ const env = parseEnv( process.env );
 
   // error handler
   app.use( ( err, req, res, next ) => {
+    if ( err.message === "No records given" || err.message === "Not found" ) {
+      err.message = "Not found";
+      err.status = 404;
+    }
+
     const data = {
       error   : true,
       errorMsg: err.message,

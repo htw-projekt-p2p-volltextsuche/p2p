@@ -36,20 +36,9 @@ module.exports = ( dht ) => {
       yield pId;
   }
 
-  // store on ALL peers
-  async function putAll( key, value ) {
-    dht._log( "PutValue %b", key );
+  async function putLocal( key, value ) {
     const record = await utils.createPutRecord( key, value );
-
-    // also store locally
     dht._putLocal( key, record );
-
-    // using allPeers instead of closestPeers
-    await utils.mapParallel( allPeers( key, { shallow: true } ), async ( peer ) => {
-      try {
-        await dht._putValueToPeer( key, record, peer );
-      } catch ( err ) { dht._log.error( "Failed to put to peer (%b): %s", peer.id, err ); }
-    } );
   }
 
   dht.incrementKeysetSize = function incrementKeysetSize() {
@@ -59,12 +48,14 @@ module.exports = ( dht ) => {
     dht.get( buffKey )
       .then( buffValue => {
         const size = parseInt( buffValue.toString() ) + 1;
-        putAll( buffKey, Buffer.from( String( size ), "utf-8" ) );
+        putLocal( buffKey, Buffer.from( String( size ), "utf-8" ) );
       } )
       .catch( err => {
-        console.log( "incrementKeysetSize error:", err.message );
+        if ( !( err.message === "No records given" || err.message === "Not found" ) )
+          console.log( "incrementKeysetSize error:", err.message );
+
         const size = 1;
-        putAll( buffKey, Buffer.from( String( size ), "utf-8" ) );
+        putLocal( buffKey, Buffer.from( String( size ), "utf-8" ) );
       } );
   };
 
