@@ -1,3 +1,4 @@
 node_modules
 variables.env
 peerId.json
+package-lock.json
