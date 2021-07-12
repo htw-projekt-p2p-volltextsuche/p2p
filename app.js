@@ -10,7 +10,7 @@ const env = parseEnv( process.env );
 ( async () => { // async wrapper to be able to use await
   const app = express();
   app.use( logger.dev );
-  app.use( bodyParser.json() );
+  app.use( bodyParser.json( { limit: env.HTTP_LIMIT }) );
   app.use( bodyParser.urlencoded( { extended: true } ) );
 
   const p2p = new P2P();
