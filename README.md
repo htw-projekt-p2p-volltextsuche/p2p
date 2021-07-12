@@ -50,6 +50,14 @@ Port for the http server to run on.
 
 Default: `8090`
 
+### `HTTP_LIMIT`
+
+The maximum request body size.
+
+Default: `10mb`
+
+See: [body-parser](https://www.npmjs.com/package/body-parser#limit-1)
+
 ### `PEER_PORT`
 
 Port for the p2p node to run on.

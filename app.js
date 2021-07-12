@@ -10,7 +10,7 @@ const env = parseEnv( process.env );
 ( async () => { // async wrapper to be able to use await
   const app = express();
   app.use( logger.dev );
-  app.use( bodyParser.json() );
+  app.use( bodyParser.json( { limit: env.HTTP_LIMIT }) );
   app.use( bodyParser.urlencoded( { extended: true } ) );
 
   const p2p = new P2P();
@@ -33,7 +33,7 @@ const env = parseEnv( process.env );
   app.use( ( err, req, res, next ) => {
     if ( err.message === "No records given" || err.message === "Not found" ) {
       err.message = "Not found";
-      err.status = 404;
+      err.status = 400;
     }
 
     const data = {
