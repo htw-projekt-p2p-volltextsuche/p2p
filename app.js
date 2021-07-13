@@ -33,7 +33,7 @@ const env = parseEnv( process.env );
   app.use( ( err, req, res, next ) => {
     if ( err.message === "No records given" || err.message === "Not found" ) {
       err.message = "Not found";
-      err.status = 400;
+      err.status = 404;
     }
 
     const data = {
