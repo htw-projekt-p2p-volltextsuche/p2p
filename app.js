@@ -35,6 +35,10 @@ const env = parseEnv( process.env );
       err.message = "Not found";
       err.status = 404;
     }
+    if ( err.code === "ERR_NO_PEERS_IN_ROUTING_TABLE" || err.message.match( /connect ECONNREFUSED/ ) !== null ) {
+      err.message = "Peer to peer net is not available";
+      err.status = 503;
+    }
 
     const data = {
       error   : true,
