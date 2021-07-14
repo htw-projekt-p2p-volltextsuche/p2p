@@ -14,8 +14,6 @@ async function createNode( env ) {
   const peerId = await getPeerId( env.PEER_STORAGE );
   const kBucketSize = env.PEER_REDUNDANCY;
 
-  console.log( Number.isInteger( kBucketSize ) );
-
   const nodeOptions = {
     peerId,
     addresses: {
@@ -34,6 +32,9 @@ async function createNode( env ) {
           enabled: true,
           list   : env.PEER_LIST,
         },
+      },
+      streamMuxer: {
+        maxMsgSize: env.PEER_MPLEX_SIZE,
       },
     },
   };

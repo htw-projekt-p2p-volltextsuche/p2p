@@ -100,6 +100,23 @@ Specifies on how many different remote nodes a value should be stored.
 
 Default: 2
 
+### `PEER_MPLEX_SIZE`
+
+Specify the max message size of the p2p net's
+[multiplexer](https://github.com/libp2p/js-libp2p-mplex).
+
+Default: `10mb`
+
+### `DEBUG`
+
+Enable logging in the p2p network.
+
+Set it to:
+
+```
+libp2p:dht:Q*,libp2p:dht:rpc:get-value:*
+```
+
 ## Scripts
 
 **Multiaddress:**
