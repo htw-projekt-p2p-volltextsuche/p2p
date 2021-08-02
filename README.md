@@ -9,12 +9,13 @@ component](https://github.com/htw-projekt-p2p-volltextsuche/fulltext-search).
 
 ## Design
 
-**Entire project**
+**Entire Project**
 
 - [Architechture Discussion and Diagramms](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/tree/main/architecture)
 - [User Stories](https://github.com/htw-projekt-p2p-volltextsuche/planning-and-design/projects/1)
+- [Our Presentation including an elaboration on two design decisions](https://github.com/htw-projekt-p2p-volltextsuche/vortrag/blob/master/slides.pdf)
 
-**This component**
+**This Component**
 
 - [API Specification](docs/openapi.yaml), [API Examples](docs/routes.md)
 - [Framework Choice and Data Distribution Design](docs/data-distribution-design.md#readme)
