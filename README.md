@@ -81,7 +81,7 @@ Default: `127.0.0.1` (localhost)
 List of peers, required for joining the network. Leave blank on first peer, that
 is "creating" the network.
 
-Default: `` (empty)
+Default: empty
 
 Format:
   - [multiaddr](https://multiformats.github.io/js-multiaddr/#what-is-multiaddr)
@@ -93,6 +93,11 @@ Example:
 ```sh
 PEER_LIST=/ip4/127.0.0.1/tcp/8071/ipfs/QmdW3RF4Yq4acYc4bgUmxeuJQLb2mQpQmMuDTGir5gQcYM, /ip4/127.0.0.1/tcp/8072/ipfs/QmPP5pdu6Dh93DL7LnQkKU2x8m4BoSrQswjQR5q26PMneg
 ```
+
+You have to fill this list manually with the multiaddresses of the other peers.
+You do this by configuring a peer through the above options (ports and ip) and
+running the `npm run addr` script to show you that specific peers multiaddress,
+which can then be used in another peers `PEER_LIST` to connect to this peer.
 
 ### `PEER_STORAGE`
 
